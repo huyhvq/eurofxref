@@ -1,0 +1,7 @@
+app: "eurofxref"
+db_host: "localhost"
+db_port: "3306"
+db_name: "eurofxref"
+db_user: "root"
+db_pass: "password"
+db_driver: "mysql"

@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:8.0
+    volumes:
+      - db_volume:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: eurofxref
+      MYSQL_USER: eurofxref
+      MYSQL_PASSWORD: eurofxref
+  api:
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      APP_DB_HOST: db
+      APP_DB_PORT: 3306
+      APP_DB_NAME: eurofxref
+      APP_DB_USER: eurofxref
+      APP_DB_PASS: eurofxref
+      APP_DB_DRIVER: mysql
+volumes:
+  db_volume: { }
