@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/huyhvq/eurofxref/pkg/model"
@@ -71,6 +72,13 @@ func TestRateRepo_GetLatestDate_Error(t *testing.T) {
 	assert.Equal(t, emptyErr, err)
 	assert.Equal(t, time.Time{}, rt)
 	assert.Nil(t, mock.ExpectationsWereMet(), "unfulfilled expectations")
+	t.Run("Case Error No Rows", func(t *testing.T) {
+		mock.ExpectQuery("SELECT `created_at` FROM `rates` ORDER BY `created_at` DESC LIMIT 1").
+			WillReturnError(sql.ErrNoRows)
+		rt, err = r.GetLatestDate()
+		assert.Nil(t, err)
+		assert.Equal(t, time.Time{}, rt)
+	})
 }
 
 func TestRateRepo_GetRatesByDate(t *testing.T) {
